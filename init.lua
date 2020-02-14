@@ -15,7 +15,7 @@ end
 myWatcher = hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
 hs.notify.new({title="Hammerspoon", informativeText="Config loaded"}):send()
 
-
+-- Open up various apps 
 local applicationHotkeys = {
   a = 'Google Chrome',
   w = 'iTerm',
@@ -43,44 +43,52 @@ hs.hotkey.bind(hyper, "3", function()
   hs.application.launchOrFocus('Sequel Pro')
 end)
 
+-- Check what's playing on Spotify
 hs.hotkey.bind(hyper, "§", function()
   hs.spotify.displayCurrentTrack()
 end)
 
+-- Bring up clipboard history from Alfred
 hs.hotkey.bind(hyper, "c", function()
   hs.eventtap.keyStroke({"alt"}, "space")
   hs.eventtap.keyStrokes("cb")
   hs.eventtap.keyStroke({},"return",hs.eventtap.keyRepeatInterval())
 end)
 
+-- Search google for highlighed text
 hs.hotkey.bind(hyper, "f", function()
   hs.eventtap.keyStroke({"cmd"}, "c")
   local search = "https://www.google.com/search?q=" .. hs.pasteboard.getContents():gsub(" ", "%%20")
   hs.urlevent.openURLWithBundle(search, 'com.google.Chrome')
 end)
 
+-- Open link in chrome
 hs.hotkey.bind(hyper, "e", function()
   hs.eventtap.keyStroke({"cmd"}, "c")
   hs.urlevent.openURLWithBundle(hs.pasteboard.getContents(), 'com.google.Chrome')
 end)
 
+-- Get correlated events goggles from message id {created}.{id}
 hs.hotkey.bind(hyper, "g", function()
   hs.eventtap.keyStroke({"cmd"}, "c")
   local goggles = "https://tools.hubteam.com/api/get/private.hubapi.com%2Femail%2Fv1%2Fcorrelated-events%2F" .. hs.pasteboard.getContents():gsub("%.", "%%2F") .. "%2Fevents?label=Correlated%20Email%20Events"
   hs.urlevent.openURLWithBundle(goggles, 'com.google.Chrome')
 end)
 
+-- Copy, find and paste highlighted text
 hs.hotkey.bind(hyper, "v", function()
   hs.eventtap.keyStroke({"cmd"}, "c", hs.eventtap.keyRepeatInterval())
   hs.eventtap.keyStroke({"cmd"}, "f")
   hs.eventtap.keyStroke({"cmd"}, "v", hs.eventtap.keyRepeatInterval())
 end)
 
+-- Highlight word cursor is on
 hs.hotkey.bind(hyper, "`", function()
   hs.eventtap.keyStroke({"alt"}, "right")
   hs.eventtap.keyStroke({"alt", "shift"}, "left")
 end)
 
+-- Opengrok selected text
 hs.hotkey.bind(hyper, "space", function()
   hs.eventtap.keyStroke({"cmd"}, "c", hs.eventtap.keyRepeatInterval())
   hs.eventtap.keyStroke({"alt"}, "space")
@@ -90,11 +98,23 @@ hs.hotkey.bind(hyper, "space", function()
   hs.eventtap.keyStroke({}, "return", hs.eventtap.keyRepeatInterval())
 end)
 
+-- Look up highlighted timestamp as date in Alfred
 hs.hotkey.bind(hyper, "t", function()
   hs.eventtap.keyStroke({"cmd"}, "c", hs.eventtap.keyRepeatInterval())
   hs.eventtap.keyStroke({"alt"}, "space")
   hs.eventtap.keyStrokes("ts ")
   hs.eventtap.keyStroke({"cmd"}, "v", hs.eventtap.keyRepeatInterval())
+  hs.eventtap.keyStroke({}, "return", hs.eventtap.keyRepeatInterval())
+end)
+
+-- Move chrome tab from one window to another
+hs.hotkey.bind(hyper, "r", function()
+  hs.eventtap.keyStroke({"cmd"}, "l", hs.eventtap.keyRepeatInterval())
+  hs.eventtap.keyStroke({"cmd"}, "c")
+  hs.eventtap.keyStroke({"cmd"}, "w", hs.eventtap.keyRepeatInterval())
+  hs.eventtap.keyStroke({"cmd"}, "`")
+  hs.eventtap.keyStroke({"cmd"}, "t", hs.eventtap.keyRepeatInterval())
+  hs.eventtap.keyStroke({"cmd"}, "v")
   hs.eventtap.keyStroke({}, "return", hs.eventtap.keyRepeatInterval())
 end)
 
@@ -119,7 +139,7 @@ function mouseHighlight()
     mouseCircle:setStrokeWidth(5)
     mouseCircle:show()
 
-    -- Set a timer to delete the circle after 3 seconds
+    -- Set a timer to delete the circle after 2 seconds
     mouseCircleTimer = hs.timer.doAfter(2, function() mouseCircle:delete() end)
 end
 hs.hotkey.bind(hyper, "4", mouseHighlight)
