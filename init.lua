@@ -118,6 +118,13 @@ hs.hotkey.bind(hyper, "r", function()
   hs.eventtap.keyStroke({}, "return", hs.eventtap.keyRepeatInterval())
 end)
 
+-- Search mothra for selected text
+hs.hotkey.bind(hyper, "5", function()
+  hs.eventtap.keyStroke({"cmd"}, "c")
+  local mothra = "https://private.hubteam.com/mothra/" .. hs.pasteboard.getContents()
+  hs.urlevent.openURLWithBundle(mothra, 'com.google.Chrome')
+end)
+
 
 mouseCircle = nil
 mouseCircleTimer = nil
